@@ -232,6 +232,16 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
                 generateContacts()
                 return true
             }
+            R.id.action_sort_first -> {
+                mContacts.sortBy { it.firstName }
+                mAdapter.notifyDataSetChanged()
+                return true
+            }
+            R.id.action_sort_last -> {
+                mContacts.sortBy { it.lastName }
+                mAdapter.notifyDataSetChanged()
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -326,8 +336,10 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
 //                .matcher(mEmailEdit.text).matches()
 
         val notEmpty: (TextView) -> Boolean = { it.text.isNotEmpty() }
-        val isEmail: (TextView) -> Boolean = { Patterns.EMAIL_ADDRESS
-                .matcher(it.text).matches() }
+        val isEmail: (TextView) -> Boolean = {
+            Patterns.EMAIL_ADDRESS
+                    .matcher(it.text).matches()
+        }
 
         val failIcon = ContextCompat.getDrawable(this,
                 R.drawable.ic_fail)
