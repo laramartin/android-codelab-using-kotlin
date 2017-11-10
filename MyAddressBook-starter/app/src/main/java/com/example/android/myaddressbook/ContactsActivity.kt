@@ -76,11 +76,7 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
      */
     private fun loadContacts(): ArrayList<Contact> {
         val contactSet = mPrefs.getStringSet(CONTACT_KEY, HashSet())
-        val contacts = ArrayList<Contact>()
-        for (contactString in contactSet) {
-            contacts.add(Gson().fromJson(contactString, Contact::class.java))
-        }
-        return contacts
+        return contactSet.mapTo(ArrayList()) { Gson().fromJson(it, Contact::class.java) }
     }
 
     /**
@@ -89,10 +85,9 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
     private fun saveContacts() {
         val editor = mPrefs.edit()
         editor.clear()
-        val contactSet = HashSet<String>()
-        for (contact in mContacts) {
-            contactSet.add(Gson().toJson(contact))
-        }
+        val contactSet = mContacts
+                .map { Gson().toJson(it) }
+                .toSet()
         editor.putStringSet(CONTACT_KEY, contactSet)
         editor.apply()
     }
