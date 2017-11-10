@@ -354,7 +354,8 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
         override fun onBindViewHolder(
                 holder: ViewHolder, position: Int) {
             val (firstName, lastName, email) = mContacts[position]
-            val fullName = firstName + " " + lastName
+            val fullName = "$firstName $lastName"
+
             holder.nameLabel.text = fullName
             holder.emailLabel.text = email
         }
@@ -364,12 +365,10 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
         }
 
         internal inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var nameLabel: TextView
-            var emailLabel: TextView
+            var nameLabel: TextView = itemView.findViewById(R.id.textview_name)
+            var emailLabel: TextView = itemView.findViewById(R.id.textview_email)
 
             init {
-                nameLabel = itemView.findViewById(R.id.textview_name)
-                emailLabel = itemView.findViewById(R.id.textview_email)
 
                 itemView.setOnClickListener { showAddContactDialog(adapterPosition) }
             }
