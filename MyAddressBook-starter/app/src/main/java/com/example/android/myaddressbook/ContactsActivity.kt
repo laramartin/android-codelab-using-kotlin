@@ -325,15 +325,10 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
      * text from member variables.
      */
     override fun afterTextChanged(editable: Editable) {
-//        val firstNameValid = !mFirstNameEdit.text.toString().isEmpty()
-//        val lastNameValid = !mLastNameEdit.text.toString().isEmpty()
-//        val emailValid = Patterns.EMAIL_ADDRESS
-//                .matcher(mEmailEdit.text).matches()
-
-        val notEmpty: (TextView) -> Boolean = { it.text.isNotEmpty() }
-        val isEmail: (TextView) -> Boolean = {
+        val notEmpty: TextView.() -> Boolean = { text.isNotEmpty() }
+        val isEmail: TextView.() -> Boolean = {
             Patterns.EMAIL_ADDRESS
-                    .matcher(it.text).matches()
+                    .matcher(text).matches()
         }
 
         val failIcon = ContextCompat.getDrawable(this,
@@ -341,14 +336,9 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
         val passIcon = ContextCompat.getDrawable(this,
                 R.drawable.ic_pass)
 
-        mFirstNameEdit.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                if (notEmpty(mFirstNameEdit)) passIcon else failIcon, null)
-        mLastNameEdit.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                if (notEmpty(mLastNameEdit)) passIcon else failIcon, null)
-        mEmailEdit.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                if (isEmail(mEmailEdit)) passIcon else failIcon, null)
-
-        mEntryValid = notEmpty(mFirstNameEdit) and notEmpty(mLastNameEdit) and isEmail(mEmailEdit)
+        mEntryValid = mFirstNameEdit.validateWith(passIcon, failIcon, notEmpty) and
+                mLastNameEdit.validateWith(passIcon, failIcon, notEmpty) and
+                mEmailEdit.validateWith(passIcon, failIcon, isEmail)
     }
 
     private inner class ContactsAdapter internal constructor(
