@@ -19,7 +19,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -331,14 +330,9 @@ class ContactsActivity : AppCompatActivity(), TextWatcher {
                     .matcher(text).matches()
         }
 
-        val failIcon = ContextCompat.getDrawable(this,
-                R.drawable.ic_fail)
-        val passIcon = ContextCompat.getDrawable(this,
-                R.drawable.ic_pass)
-
-        mEntryValid = mFirstNameEdit.validateWith(passIcon, failIcon, notEmpty) and
-                mLastNameEdit.validateWith(passIcon, failIcon, notEmpty) and
-                mEmailEdit.validateWith(passIcon, failIcon, isEmail)
+        mEntryValid = mFirstNameEdit.validateWith(validator = notEmpty) and
+                mLastNameEdit.validateWith(validator = notEmpty) and
+                mEmailEdit.validateWith(validator = isEmail)
     }
 
     private inner class ContactsAdapter internal constructor(
